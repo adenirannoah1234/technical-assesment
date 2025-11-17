@@ -118,7 +118,7 @@ const Navbar = () => {
           <div className="relative">
             <button
               onClick={() => setIsCountryDropdownOpen(!isCountryDropdownOpen)}
-              className="flex items-center space-x-1 px-2 py-1 rounded-lg hover:bg-white/50 transition-colors"
+              className="flex items-center space-x-1 px-2 py-1 rounded-lg hover:bg-white/50 transition-colors cursor-pointer"
             >
               <img
                 src={selectedFlagUrl}
@@ -127,14 +127,14 @@ const Navbar = () => {
                 onError={handleSelectedFlagError}
               />
               <ChevronDownIcon
-                className={`w-4 h-4 text-[#0A2540] transition-transform ${
+                className={`w-4 h-4 text-[#000000] transition-transform cursor-pointer ${
                   isCountryDropdownOpen ? 'rotate-180' : ''
                 }`}
               />
             </button>
 
             {isCountryDropdownOpen && (
-              <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-xl border border-gray-200 overflow-hidden z-50">
+              <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-xl border border-gray-200 overflow-hidden z-50 cursor-pointer">
                 {countries.map((country) => (
                   <CountryItem
                     key={country.code}
