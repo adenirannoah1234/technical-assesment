@@ -35,7 +35,7 @@ const CredpalSavings = () => {
               Save smarter, not harder
             </h2>
 
-            <h4 className="text-sm sm:text-base md:text-lg font-light text-[#000000] leading-relaxed">
+            <h4 className="text-sm sm:text-base md:text-lg font-light text-[#000000] ">
               With CredPal, saving isn't complicated. Set your goals, create
               budgets, and watch your savings grow automatically.
             </h4>

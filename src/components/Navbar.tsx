@@ -1,19 +1,59 @@
 import { useState } from 'react';
 import { ChevronDownIcon } from './Icons';
+import { useFlagImage } from '../hooks/useFlagImage';
+
+interface Country {
+  code: string;
+  name: string;
+}
+
+interface CountryItemProps {
+  country: Country;
+  isSelected: boolean;
+  onSelect: (country: Country) => void;
+}
+
+const CountryItem = ({ country, isSelected, onSelect }: CountryItemProps) => {
+  const { flagUrl, handleError } = useFlagImage(country.code);
+
+  return (
+    <button
+      onClick={() => onSelect(country)}
+      className={`w-full flex items-center space-x-3 px-4 py-2 hover:bg-gray-50 transition-colors ${
+        isSelected ? 'bg-blue-50' : ''
+      }`}
+    >
+      <img
+        src={flagUrl}
+        alt={country.name}
+        className="w-5 h-5 object-cover rounded-full"
+        onError={handleError}
+      />
+      <span className="text-sm text-gray-700">{country.name}</span>
+    </button>
+  );
+};
 
 const Navbar = () => {
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [isCountryDropdownOpen, setIsCountryDropdownOpen] = useState(false);
+  const [isProductsDropdownOpen, setIsProductsDropdownOpen] = useState(false);
 
   const countries = [
-    { code: 'US', name: 'United States', flag: '🇺🇸' },
-    { code: 'GB', name: 'United Kingdom', flag: '🇬🇧' },
-    { code: 'NG', name: 'Nigeria', flag: '🇳🇬' },
-    { code: 'KE', name: 'Kenya', flag: '🇰🇪' },
-    { code: 'GH', name: 'Ghana', flag: '🇬🇭' },
-    { code: 'ZA', name: 'South Africa', flag: '🇿🇦' },
+    { code: 'NG', name: 'Nigeria' },
+    { code: 'KE', name: 'Kenya' },
+    { code: 'GH', name: 'Ghana' },
+  ];
+
+  const products = [
+    { name: 'Pay in 4', href: '#' },
+    { name: 'CredPal Card', href: '#' },
+    { name: 'CredPal Savings', href: '#' },
+    { name: 'Shop with CredPal', href: '#' },
   ];
 
   const [selectedCountry, setSelectedCountry] = useState(countries[0]);
+  const { flagUrl: selectedFlagUrl, handleError: handleSelectedFlagError } =
+    useFlagImage(selectedCountry.code);
 
   return (
     <nav
@@ -24,63 +64,87 @@ const Navbar = () => {
       }}
     >
       <div className="max-w-7xl mx-auto flex items-center justify-between">
-        <div className="flex items-center">
+        <div className="flex items-center space-x-6 lg:space-x-8">
           <img src="/logo.svg" alt="CredPal Logo" className="h-6 md:h-7" />
-        </div>
 
-        <div className="hidden md:flex items-center space-x-6 lg:space-x-8">
-          <a
-            href="#"
-            className="text-[#0A2540] hover:text-[#0A2540]/80 transition-colors text-sm lg:text-base font-medium"
-          >
-            Products
-          </a>
-          <a
-            href="#"
-            className="text-[#0A2540] hover:text-[#0A2540]/80 transition-colors text-sm lg:text-base font-medium"
-          >
-            Business
-          </a>
-          <a
-            href="#"
-            className="text-[#0A2540] hover:text-[#0A2540]/80 transition-colors text-sm lg:text-base font-medium"
-          >
-            Shop
-          </a>
+          <div className="hidden md:flex items-center space-x-6 lg:space-x-8">
+            <div className="relative">
+              <button
+                onClick={() =>
+                  setIsProductsDropdownOpen(!isProductsDropdownOpen)
+                }
+                className="flex items-center space-x-1 text-[#000000] hover:text-[#0A2540]/80 transition-colors text-sm lg:text-base font-medium cursor-pointer"
+              >
+                <span>Products</span>
+                <ChevronDownIcon
+                  className={`w-4 h-4 text-[#000000] transition-transform ${
+                    isProductsDropdownOpen ? 'rotate-180' : ''
+                  }`}
+                />
+              </button>
+
+              {isProductsDropdownOpen && (
+                <div className="absolute left-0 mt-2 w-48 bg-white rounded-lg shadow-xl border border-gray-200 overflow-hidden z-50">
+                  {products.map((product) => (
+                    <a
+                      key={product.name}
+                      href={product.href}
+                      className="block w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors cursor-pointer"
+                      onClick={() => setIsProductsDropdownOpen(false)}
+                    >
+                      {product.name}
+                    </a>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            <a
+              href="#"
+              className="text-[#000000] hover:text-[#0A2540]/80 transition-colors text-sm lg:text-base font-medium cursor-pointer"
+            >
+              Business
+            </a>
+            <a
+              href="#"
+              className="text-[#000000] hover:text-[#0A2540]/80 transition-colors text-sm lg:text-base font-medium cursor-pointer "
+            >
+              Shop
+            </a>
+          </div>
         </div>
 
         <div className="flex items-center space-x-3 md:space-x-4">
           <div className="relative">
             <button
-              onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+              onClick={() => setIsCountryDropdownOpen(!isCountryDropdownOpen)}
               className="flex items-center space-x-1 px-2 py-1 rounded-lg hover:bg-white/50 transition-colors"
             >
-              <span className="text-xl">{selectedCountry.flag}</span>
+              <img
+                src={selectedFlagUrl}
+                alt={selectedCountry.name}
+                className="w-5 h-5 object-cover rounded-full"
+                onError={handleSelectedFlagError}
+              />
               <ChevronDownIcon
                 className={`w-4 h-4 text-[#0A2540] transition-transform ${
-                  isDropdownOpen ? 'rotate-180' : ''
+                  isCountryDropdownOpen ? 'rotate-180' : ''
                 }`}
               />
             </button>
 
-            {isDropdownOpen && (
+            {isCountryDropdownOpen && (
               <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-xl border border-gray-200 overflow-hidden z-50">
                 {countries.map((country) => (
-                  <button
+                  <CountryItem
                     key={country.code}
-                    onClick={() => {
+                    country={country}
+                    isSelected={selectedCountry.code === country.code}
+                    onSelect={(country) => {
                       setSelectedCountry(country);
-                      setIsDropdownOpen(false);
+                      setIsCountryDropdownOpen(false);
                     }}
-                    className={`w-full flex items-center space-x-3 px-4 py-2 hover:bg-gray-50 transition-colors ${
-                      selectedCountry.code === country.code ? 'bg-blue-50' : ''
-                    }`}
-                  >
-                    <span className="text-xl">{country.flag}</span>
-                    <span className="text-sm text-gray-700">
-                      {country.name}
-                    </span>
-                  </button>
+                  />
                 ))}
               </div>
             )}
@@ -92,10 +156,13 @@ const Navbar = () => {
         </div>
       </div>
 
-      {isDropdownOpen && (
+      {(isCountryDropdownOpen || isProductsDropdownOpen) && (
         <div
           className="fixed inset-0 z-40"
-          onClick={() => setIsDropdownOpen(false)}
+          onClick={() => {
+            setIsCountryDropdownOpen(false);
+            setIsProductsDropdownOpen(false);
+          }}
         />
       )}
     </nav>

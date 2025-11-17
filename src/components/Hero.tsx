@@ -31,21 +31,20 @@ const Hero = () => {
           <div className="relative flex justify-center items-center py-4 sm:py-8">
             <div className="relative w-full max-w-xs sm:max-w-sm md:max-w-md flex items-center">
               <div
-                className="absolute z-20"
+                className="absolute z-20 -rotate-[12deg]"
                 style={{
-                  left: '-60px',
+                  left: '-30px',
                   top: '50%',
-                  transform: 'translateY(-50%) rotate(-12deg)',
+                  transform: 'translateY(-50%)',
                 }}
               >
-                <img
-                  src="/Credit Card.png"
-                  alt="CredPal Credit Card"
-                  className="w-40 sm:w-48 md:w-56 lg:w-64 drop-shadow-2xl"
-                  style={{
-                    display: 'block',
-                  }}
-                />
+                <div style={{ transform: 'rotate(12deg)' }}>
+                  <img
+                    src="/Credit Card.png"
+                    alt="CredPal Credit Card"
+                    className="w-40 sm:w-48 md:w-56 lg:w-64 drop-shadow-2xl block"
+                  />
+                </div>
               </div>
 
               <img
